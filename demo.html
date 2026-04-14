@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What We Can Do — Get Found Local</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&family=Syne:wght@800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root{
+      --ink:#08090f;
+      --gold:#c8963c;
+      --gold2:#e8b96a;
+      --white:#fff;
+      --muted:rgba(255,255,255,.4);
+      --border:rgba(255,255,255,.07);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:auto}
+    body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden;cursor:none}
+
+    /* Custom cursor */
+    .cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s,opacity .3s}
+    .cur-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(200,150,60,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s}
+    body:not(:hover) .cur{opacity:0}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 52px;mix-blend-mode:normal}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--white)}.logo em{font-style:italic;color:var(--gold)}
+    .nav-links{display:flex;align-items:center;gap:4px}.nav-links a{padding:7px 14px;font-size:.82rem;font-weight:500;color:var(--muted);border-radius:8px;transition:color .2s}.nav-links a:hover,.nav-links a.active{color:var(--white)}
+    .nav-cta{background:var(--gold)!important;color:var(--ink)!important;border-radius:50px!important;padding:8px 22px!important;font-weight:700!important}.nav-cta:hover{background:var(--gold2)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+    .mob{display:none;position:fixed;top:66px;left:0;right:0;background:rgba(8,9,15,.97);border-bottom:1px solid var(--border);padding:14px 24px;flex-direction:column;gap:2px;z-index:999}.mob.open{display:flex}.mob a{padding:11px 14px;font-size:.92rem;color:var(--muted);border-radius:8px}.mob a:hover{color:var(--white)}
+
+    /* ── THE CINEMA ── */
+    /* Everything lives in one pinned viewport */
+    .scroll-track{height:700vh} /* total scroll distance */
+
+    .cinema{
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      background:var(--ink);
+      overflow:hidden;
+    }
+
+    /* Atmospheric background — single large gradient orb that shifts */
+    .atmo{
+      position:absolute;
+      width:800px;height:800px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(200,150,60,.14) 0%, rgba(200,150,60,.04) 40%, transparent 70%);
+      top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+
+    /* Grain texture overlay */
+    .grain{
+      position:absolute;inset:0;
+      opacity:.035;
+      pointer-events:none;
+      z-index:1;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size:256px;
+    }
+
+    /* All scenes — absolute, centered */
+    .scene{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      padding:80px 52px;
+      z-index:2;
+      will-change:opacity,transform;
+    }
+
+    /* ── SCENE 0: TITLE ── */
+    .s0-inner{text-align:center;max-width:800px}
+    .s0-eyebrow{font-size:.68rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:32px;display:block;opacity:0}
+    .s0-h{font-family:'Syne',sans-serif;font-size:clamp(4rem,10vw,9rem);font-weight:800;letter-spacing:-4px;line-height:.88;color:var(--white);opacity:0;transform:translateY(40px)}
+    .s0-h em{font-family:'DM Serif Display',serif;font-style:italic;color:var(--gold2);font-size:.9em}
+    .s0-sub{font-size:1rem;color:var(--muted);margin-top:28px;line-height:1.75;max-width:420px;margin-left:auto;margin-right:auto;opacity:0}
+    .s0-scroll{margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:none}
+    .s0-scroll-t{font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.25)}
+    .s0-scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,var(--gold),transparent)}
+
+    /* ── SCENE 1: BIG STATEMENT ── */
+    .s1-inner{text-align:center;max-width:900px}
+    .s1-h{font-family:'Syne',sans-serif;font-size:clamp(3rem,7vw,6.5rem);font-weight:800;letter-spacing:-3px;line-height:.92;color:var(--white)}
+    .s1-h .line{overflow:hidden;display:block}
+    .s1-h .word{display:inline-block;opacity:0;transform:translateY(100%)}
+    .s1-h .hl{color:var(--gold2)}
+
+    /* ── SCENE 2: FEATURE STRIP ── */
+    .s2-inner{max-width:1100px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+    .s2-left .s2-label{font-size:.68rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+    .s2-left .s2-label::before{content:'';width:24px;height:1px;background:var(--gold)}
+    .s2-left h2{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,4vw,3.2rem);line-height:1.1;color:var(--white)}
+    .s2-left h2 em{font-style:italic;color:var(--gold2)}
+    .s2-left p{color:var(--muted);line-height:1.8;margin-top:16px;font-size:.95rem;font-weight:300}
+    .s2-right{display:flex;flex-direction:column;gap:0}
+    .s2-feat{display:flex;align-items:center;gap:16px;padding:20px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateX(30px)}
+    .s2-feat:last-child{border-bottom:none}
+    .feat-num{font-family:'DM Serif Display',serif;font-size:1.2rem;font-style:italic;color:rgba(200,150,60,.4);min-width:28px}
+    .feat-text h4{font-size:.88rem;font-weight:600;margin-bottom:3px}
+    .feat-text p{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+    /* ── SCENE 3: PRICING ── */
+    .s3-inner{max-width:1000px;width:100%;display:flex;flex-direction:column;align-items:center;gap:44px;text-align:center}
+    .s3-label{font-size:.68rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px;opacity:0}
+    .s3-label::before,.s3-label::after{content:'';width:24px;height:1px;background:var(--gold)}
+    .s3-h{font-family:'Syne',sans-serif;font-size:clamp(2rem,4.5vw,3.5rem);font-weight:800;letter-spacing:-2px;color:var(--white);opacity:0;transform:translateY(20px)}
+    .s3-cards{display:flex;gap:14px;width:100%;justify-content:center}
+    .s3c{
+      flex:1;max-width:280px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:18px;padding:32px 26px;
+      text-align:left;
+      opacity:0;transform:translateY(40px);
+      transition:border-color .3s,background .3s;
+    }
+    .s3c:hover{border-color:rgba(200,150,60,.3);background:rgba(200,150,60,.04)}
+    .s3c.hot{border-color:rgba(200,150,60,.35);background:rgba(200,150,60,.05)}
+    .s3c-tier{font-size:.63rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:14px}
+    .s3c-price{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;color:var(--white);line-height:1;margin-bottom:4px}
+    .s3c-note{font-size:.72rem;color:rgba(255,255,255,.25);margin-bottom:22px}
+    .s3c-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .s3c-list li{font-size:.8rem;color:var(--muted);display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+    .s3c-list li::before{content:'→';color:var(--gold2);font-size:.75rem;margin-top:1px;flex-shrink:0}
+
+    /* ── SCENE 4: CTA ── */
+    .s4-inner{text-align:center;max-width:700px}
+    .s4-h{font-family:'DM Serif Display',serif;font-size:clamp(3rem,7vw,6rem);line-height:1;letter-spacing:-1px;color:var(--white);opacity:0;transform:scale(.92)}
+    .s4-h em{font-style:italic;color:var(--gold2)}
+    .s4-p{font-size:1rem;color:var(--muted);margin-top:20px;line-height:1.75;max-width:400px;margin-left:auto;margin-right:auto;opacity:0;font-weight:300}
+    .s4-btn{display:inline-block;background:var(--gold);color:var(--ink);padding:16px 44px;border-radius:50px;font-weight:700;font-size:.95rem;margin-top:32px;opacity:0;transform:translateY(16px);pointer-events:auto}
+    .s4-btn:hover{background:var(--gold2);transform:translateY(-2px)!important}
+
+    /* Progress indicator — minimal dots on right */
+    .prog{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:500}
+    .pd{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);transition:all .4s;cursor:pointer}
+    .pd.on{background:var(--gold);transform:scale(1.6)}
+
+    /* After cinema */
+    .post{position:relative;z-index:10;margin-top:700vh}
+    .post-cta{padding:100px 52px;text-align:center;background:var(--ink);border-top:1px solid var(--border)}
+    .post-cta h2{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3.2rem);color:var(--white);margin-bottom:14px}
+    .post-cta h2 em{font-style:italic;color:var(--gold2)}
+    .post-cta p{color:var(--muted);max-width:400px;margin:0 auto 32px;line-height:1.75;font-weight:300}
+    .btn-gold{display:inline-block;background:var(--gold);color:var(--ink);padding:14px 34px;border-radius:50px;font-weight:700;font-size:.92rem;transition:all .25s}
+    .btn-gold:hover{background:var(--gold2);transform:translateY(-2px)}
+    footer{background:#05060a;padding:36px 52px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-top:1px solid var(--border)}
+    .f-logo{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--white)}.f-logo em{font-style:italic;color:var(--gold2)}
+    footer p{font-size:.78rem;color:rgba(255,255,255,.25)}footer a{font-size:.78rem;color:rgba(255,255,255,.25);transition:color .2s}footer a:hover{color:var(--gold2)}
+
+    @media(max-width:768px){
+      nav{padding:0 20px}.nav-links{display:none}.hamburger{display:flex}
+      .prog{display:none}.cur,.cur-ring{display:none}body{cursor:auto}
+      .scene{padding:80px 20px}
+      .s2-inner{grid-template-columns:1fr;gap:36px}
+      .s3-cards{flex-direction:column;align-items:center}
+      .s3c{max-width:100%;width:100%}
+      .post-cta{padding:80px 20px}
+      footer{padding:28px 20px;flex-direction:column;text-align:center}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
+
+<nav>
+  <a href="index.html" class="logo">Get Found <em>Local</em></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="demo.html" class="active">Demo</a>
+    <a href="services.html">Services</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html" class="nav-cta">Get a Website</a>
+  </div>
+  <div class="hamburger" onclick="document.getElementById('mob').classList.toggle('open')"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html">Home</a><a href="demo.html">Demo</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="contact.html">Get a Website</a>
+</div>
+
+<!-- Progress dots -->
+<div class="prog" id="prog">
+  <div class="pd on" onclick="jumpTo(0)"></div>
+  <div class="pd" onclick="jumpTo(1)"></div>
+  <div class="pd" onclick="jumpTo(2)"></div>
+  <div class="pd" onclick="jumpTo(3)"></div>
+  <div class="pd" onclick="jumpTo(4)"></div>
+</div>
+
+<!-- Scroll track (creates scroll length) -->
+<div class="scroll-track"></div>
+
+<!-- CINEMA (fixed to viewport) -->
+<div class="cinema" id="cinema">
+  <div class="atmo" id="atmo"></div>
+  <div class="grain"></div>
+
+  <!-- S0: OPENING TITLE -->
+  <div class="scene" id="s0">
+    <div class="s0-inner">
+      <span class="s0-eyebrow">Scroll to experience</span>
+      <h1 class="s0-h">This is<br><em>what we do.</em></h1>
+      <p class="s0-sub">A cinematic showcase of what gets built into your website. Scroll to move through it.</p>
+      <div class="s0-scroll"><span class="s0-scroll-t">scroll</span><div class="s0-scroll-line"></div></div>
+    </div>
+  </div>
+
+  <!-- S1: BIG STATEMENT -->
+  <div class="scene" id="s1" style="opacity:0">
+    <div class="s1-inner">
+      <h2 class="s1-h">
+        <span class="line"><span class="word">Your business</span></span>
+        <span class="line"><span class="word">tells a story.</span></span>
+        <span class="line"><span class="word hl">We help</span></span>
+        <span class="line"><span class="word hl">people find it.</span></span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- S2: FEATURES -->
+  <div class="scene" id="s2" style="opacity:0">
+    <div class="s2-inner">
+      <div class="s2-left">
+        <div class="s2-label">Standard — $799</div>
+        <h2>Everything<br>a local business<br>needs <em>online.</em></h2>
+        <p>Built from your real Google listing — photos, hours, reviews. Live in 3–4 days. You own everything.</p>
+      </div>
+      <div class="s2-right">
+        <div class="s2-feat"><span class="feat-num">01</span><div class="feat-text"><h4>6–10 Pages</h4><p>Home, services, gallery, about, FAQ — every page you need.</p></div></div>
+        <div class="s2-feat"><span class="feat-num">02</span><div class="feat-text"><h4>Photo Effects</h4><p>Zoom, color reveal, blur-to-sharp — your photos come alive on hover.</p></div></div>
+        <div class="s2-feat"><span class="feat-num">03</span><div class="feat-text"><h4>Booking Integration</h4><p>Calendly or Google Calendar embed so clients book directly.</p></div></div>
+        <div class="s2-feat"><span class="feat-num">04</span><div class="feat-text"><h4>Contact Form</h4><p>Submissions go to your email. Zero backend needed.</p></div></div>
+        <div class="s2-feat"><span class="feat-num">05</span><div class="feat-text"><h4>SEO + Schema</h4><p>Google finds you from day one. Local business markup included.</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3: PRICING -->
+  <div class="scene" id="s3" style="opacity:0">
+    <div class="s3-inner">
+      <div class="s3-label">Pricing</div>
+      <h2 class="s3-h">One standard.<br>Three tiers.</h2>
+      <div class="s3-cards">
+        <div class="s3c">
+          <div class="s3c-tier">Basic</div>
+          <div class="s3c-price">$399</div>
+          <div class="s3c-note">build fee + from $49/mo</div>
+          <ul class="s3c-list"><li>1–5 pages</li><li>Animated hero</li><li>Scroll reveals</li><li>SEO built in</li></ul>
+        </div>
+        <div class="s3c hot">
+          <div class="s3c-tier">Standard — Most Popular</div>
+          <div class="s3c-price">$799</div>
+          <div class="s3c-note">build fee + from $49/mo</div>
+          <ul class="s3c-list"><li>6–10 pages</li><li>Photo effects</li><li>Contact form</li><li>Booking button</li></ul>
+        </div>
+        <div class="s3c">
+          <div class="s3c-tier">Premium</div>
+          <div class="s3c-price">$1,499</div>
+          <div class="s3c-note">build fee + from $49/mo</div>
+          <ul class="s3c-list"><li>Online booking</li><li>Stripe payments</li><li>Product catalog</li><li>Analytics setup</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4: CTA -->
+  <div class="scene" id="s4" style="opacity:0">
+    <div class="s4-inner">
+      <h2 class="s4-h">Ready to get<br><em>found?</em></h2>
+      <p class="s4-p">Your customers are searching for you right now. Let's make sure they find something beautiful.</p>
+      <a href="contact.html" class="s4-btn">Request Your Website →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- After cinema -->
+<div class="post">
+  <section class="post-cta">
+    <h2>Let's build your site <em>together.</em></h2>
+    <p>Fill out the form and we'll reach out within 24 hours. No payment until you approve.</p>
+    <a href="contact.html" class="btn-gold">Get Started →</a>
+  </section>
+  <footer>
+    <div class="f-logo">Get Found <em>Local</em></div>
+    <p>Serving local businesses across Colorado & the US</p>
+    <a href="mailto:Get-Found-Local@outlook.com">Get-Found-Local@outlook.com</a>
+  </footer>
+</div>
+
+<!--Tawk.to-->
+<script type="text/javascript">var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69dd997b9ef2731c3237ae64/1jm4pv30t';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();</script>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const curRing = document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+const isTouchDevice = () => ('ontouchstart' in window) || window.matchMedia('(hover:none)').matches;
+if (!isTouchDevice()) {
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  document.addEventListener('mouseleave', () => { cur.style.opacity=0; curRing.style.opacity=0; });
+  document.addEventListener('mouseenter', () => { cur.style.opacity=1; curRing.style.opacity=1; });
+  (function animRing(){
+    rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
+    curRing.style.left=rx+'px'; curRing.style.top=ry+'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';curRing.style.width='56px';curRing.style.height='56px'});
+    el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';curRing.style.width='36px';curRing.style.height='36px'});
+  });
+}
+
+// ── SCENE MANAGEMENT ──
+const TOTAL_SCENES = 5;
+const SCROLL_HEIGHT = window.innerHeight * 7;
+const sceneEls = ['s0','s1','s2','s3','s4'].map(id => document.getElementById(id));
+const dots = document.querySelectorAll('.pd');
+let currentScene = -1;
+
+function showScene(idx) {
+  if (idx === currentScene) return;
+  const prev = currentScene;
+  currentScene = idx;
+
+  // Update dots
+  dots.forEach((d,i) => d.classList.toggle('on', i===idx));
+
+  // Fade out previous
+  if (prev >= 0 && prev !== idx) {
+    gsap.to(sceneEls[prev], {
+      opacity: 0, scale: idx > prev ? 0.96 : 1.04,
+      duration: 0.6, ease: 'power2.inOut',
+      onComplete: () => { sceneEls[prev].style.pointerEvents='none'; }
+    });
+  }
+
+  // Shift orb
+  const positions = [{x:0,y:0},{x:-200,y:100},{x:200,y:-80},{x:-100,y:150},{x:0,y:0}];
+  const pos = positions[idx] || {x:0,y:0};
+  gsap.to('#atmo', { x: pos.x, y: pos.y, scale: 1 + idx*0.1, duration: 1.2, ease: 'power2.out' });
+
+  // Fade in new scene
+  sceneEls[idx].style.pointerEvents = 'auto';
+  gsap.fromTo(sceneEls[idx],
+    { opacity: 0, scale: idx > prev ? 1.04 : 0.96, y: idx > prev ? 30 : -30 },
+    { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+  );
+
+  // Scene-specific animations
+  if (idx === 0) introAnim();
+  if (idx === 1) s1Anim();
+  if (idx === 2) s2Anim();
+  if (idx === 3) s3Anim();
+  if (idx === 4) s4Anim();
+}
+
+// ── INTRO (S0) ──
+function introAnim() {
+  gsap.fromTo('.s0-eyebrow', {opacity:0,y:10}, {opacity:1,y:0,duration:.8,delay:.3});
+  gsap.fromTo('.s0-h', {opacity:0,y:40}, {opacity:1,y:0,duration:1,delay:.5,ease:'power3.out'});
+  gsap.fromTo('.s0-sub', {opacity:0}, {opacity:1,duration:.8,delay:1});
+  gsap.fromTo('.s0-scroll', {opacity:0}, {opacity:1,duration:.8,delay:1.4});
+}
+
+// ── S1: WORDS ──
+function s1Anim() {
+  gsap.fromTo('.s1-h .word', {opacity:0,y:'100%'}, {opacity:1,y:0,stagger:.12,duration:.7,ease:'power3.out',delay:.2});
+}
+
+// ── S2: FEATURES ──
+function s2Anim() {
+  gsap.fromTo('.s2-left', {opacity:0,x:-30}, {opacity:1,x:0,duration:.8,delay:.2,ease:'power3.out'});
+  gsap.fromTo('.s2-feat', {opacity:0,x:30}, {opacity:1,x:0,stagger:.1,duration:.6,delay:.4,ease:'power3.out'});
+}
+
+// ── S3: PRICING ──
+function s3Anim() {
+  gsap.fromTo('.s3-label', {opacity:0}, {opacity:1,duration:.6,delay:.2});
+  gsap.fromTo('.s3-h', {opacity:0,y:20}, {opacity:1,y:0,duration:.7,delay:.4,ease:'power3.out'});
+  gsap.fromTo('.s3c', {opacity:0,y:40}, {opacity:1,y:0,stagger:.12,duration:.7,delay:.6,ease:'back.out(1.4)'});
+}
+
+// ── S4: CTA ──
+function s4Anim() {
+  gsap.fromTo('.s4-h', {opacity:0,scale:.92}, {opacity:1,scale:1,duration:.9,delay:.2,ease:'power3.out'});
+  gsap.fromTo('.s4-p', {opacity:0}, {opacity:1,duration:.7,delay:.8});
+  gsap.fromTo('.s4-btn', {opacity:0,y:16}, {opacity:1,y:0,duration:.7,delay:1,ease:'back.out(1.4)'});
+}
+
+// ── SCROLL → SCENE MAPPING ──
+ScrollTrigger.create({
+  trigger: '.scroll-track',
+  start: 'top top',
+  end: 'bottom bottom',
+  onUpdate: self => {
+    const scene = Math.min(TOTAL_SCENES-1, Math.floor(self.progress * TOTAL_SCENES));
+    showScene(scene);
+  }
+});
+
+// ── JUMP TO SCENE ──
+function jumpTo(idx) {
+  const progress = idx / TOTAL_SCENES;
+  const scrollTarget = (document.querySelector('.scroll-track').offsetHeight) * progress;
+  window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+}
+
+// ── INIT ──
+gsap.set(sceneEls.slice(1), {opacity:0});
+window.addEventListener('load', () => { showScene(0); });
+</script>
+</body>
+</html>

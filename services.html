@@ -4,51 +4,80 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Services — Get Found Local</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
-    :root{--ink:#0a0d18;--ink2:#141828;--ink3:#1e2538;--gold:#c8963c;--gold2:#e8b96a;--white:#fff;--muted:rgba(255,255,255,.45);--border:rgba(255,255,255,.08);--r:16px}
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
-    body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
-    a{text-decoration:none;color:inherit}img{display:block}
-    nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(10,13,24,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-    .logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--white)}.logo em{font-style:italic;color:var(--gold)}
-    .nav-links{display:flex;align-items:center;gap:4px}.nav-links a{padding:7px 14px;font-size:.85rem;font-weight:500;color:var(--muted);border-radius:8px;transition:color .2s,background .2s}.nav-links a:hover,.nav-links a.active{color:var(--white);background:rgba(255,255,255,.06)}
-    .nav-cta{background:var(--gold)!important;color:var(--ink)!important;border-radius:50px!important;padding:8px 22px!important;font-weight:700!important}.nav-cta:hover{background:var(--gold2)!important}
-    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
-    .mob{display:none;position:fixed;top:66px;left:0;right:0;background:rgba(10,13,24,.97);border-bottom:1px solid var(--border);padding:14px 24px;flex-direction:column;gap:2px;z-index:999}.mob.open{display:flex}.mob a{padding:11px 14px;font-size:.92rem;color:var(--muted);border-radius:8px;font-weight:500}.mob a:hover{color:var(--white);background:rgba(255,255,255,.06)}
-    .page-header{padding:120px 52px 60px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
-    .page-header::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,150,60,.1) 0%,transparent 65%);pointer-events:none}
-    .s-label{display:flex;align-items:center;gap:10px;margin-bottom:16px}.s-line{width:28px;height:1px;background:var(--gold)}.s-tag{font-size:.7rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
-    h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,7vw,6rem);font-weight:800;letter-spacing:-2px;line-height:.95;margin-bottom:20px}
-    h1 em{font-style:italic;font-family:'DM Serif Display',serif;color:var(--gold2)}
-    h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-1px;line-height:1.05;margin-bottom:16px}
-    h2 em{font-style:italic;font-family:'DM Serif Display',serif;color:var(--gold2)}
-    .sub{font-size:.98rem;color:var(--muted);line-height:1.75;max-width:520px;font-weight:300}
-    section{padding:90px 52px}
-    .btn-gold{display:inline-block;background:var(--gold);color:var(--ink);padding:14px 32px;border-radius:50px;font-weight:700;font-size:.92rem;transition:all .25s}
-    .btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 6px 24px rgba(200,150,60,.35)}
-    .btn-outline{display:inline-block;background:transparent;color:var(--white);padding:14px 32px;border-radius:50px;font-weight:500;font-size:.92rem;border:1px solid var(--border);transition:all .25s}
-    .btn-outline:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.05)}
-    [data-r]{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1)}[data-r].on{opacity:1;transform:none}
-    footer{background:var(--ink2);padding:40px 52px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-top:1px solid var(--border)}
-    .f-logo{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--white)}.f-logo em{font-style:italic;color:var(--gold2)}
-    footer p{font-size:.8rem;color:rgba(255,255,255,.3)}footer a{font-size:.8rem;color:rgba(255,255,255,.3);transition:color .2s}footer a:hover{color:var(--gold2)}
-    @media(max-width:768px){nav{padding:0 20px}.nav-links{display:none}.hamburger{display:flex}section,.page-header{padding-left:20px;padding-right:20px}footer{padding:28px 20px;flex-direction:column;text-align:center}}
-    .fx-demo-box{background:var(--ink2);border-radius:var(--r);padding:52px;text-align:center;border:1px solid var(--border);margin-top:52px}
-    .fx-demo-box h3{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:12px}
+    :root {
+      --bg:#070810; --bg2:#0d0f1a; --bg3:#12152a;
+      --gold:#d4a853; --gold2:#f0c87a; --gold3:rgba(212,168,83,.1);
+      --white:#fff; --muted:rgba(255,255,255,.42); --border:rgba(255,255,255,.06); --r:20px;
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;cursor:auto}
+    a{text-decoration:none;color:inherit}
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 56px;background:rgba(7,8,16,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .logo{font-family:'Instrument Serif',serif;font-size:1.25rem;color:var(--white)}.logo em{font-style:italic;color:var(--gold)}
+    .nav-links{display:flex;align-items:center;gap:2px}
+    .nav-links a{padding:7px 14px;font-size:.82rem;font-weight:500;color:var(--muted);border-radius:8px;transition:color .2s}
+    .nav-links a:hover,.nav-links a.active{color:var(--white)}
+    .nav-cta{background:var(--gold)!important;color:var(--bg)!important;border-radius:50px!important;padding:8px 24px!important;font-weight:600!important;font-size:.83rem!important}
+    .nav-cta:hover{background:var(--gold2)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}
+    .hamburger span{display:block;width:22px;height:1.5px;background:var(--white);border-radius:2px}
+    .mob{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(7,8,16,.98);border-bottom:1px solid var(--border);padding:16px 28px;flex-direction:column;gap:2px;z-index:999}
+    .mob.open{display:flex}
+    .mob a{padding:12px 14px;font-size:.9rem;color:var(--muted);border-radius:8px}
+    .mob a:hover{color:var(--white)}
+    .page-hero{padding:140px 56px 80px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+    .page-hero::before{content:'';position:absolute;top:-150px;right:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,83,.09) 0%,transparent 65%);pointer-events:none}
+    .eyebrow{display:flex;align-items:center;gap:12px;font-size:.68rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
+    .eyebrow-line{width:28px;height:1px;background:var(--gold)}
+    h1{font-family:'Instrument Serif',serif;font-size:clamp(3rem,7vw,6rem);line-height:.95;letter-spacing:-1.5px;font-weight:400;margin-bottom:20px}
+    h1 em{font-style:italic;color:var(--gold2)}
+    h2{font-family:'Instrument Serif',serif;font-size:clamp(1.9rem,4vw,3.2rem);font-weight:400;line-height:1.1;letter-spacing:-.5px;margin-bottom:16px}
+    h2 em{font-style:italic;color:var(--gold2)}
+    h3{font-family:'Instrument Serif',serif;font-size:1.3rem;font-weight:400;margin-bottom:8px}
+    .lede{font-size:1rem;color:var(--muted);line-height:1.8;max-width:540px;font-weight:300}
+    section{padding:90px 56px}
+    .section-label{display:flex;align-items:center;gap:12px;font-size:.68rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+    .s-line{width:28px;height:1px;background:var(--gold)}
+    .btn{display:inline-block;background:var(--gold);color:var(--bg);padding:14px 34px;border-radius:50px;font-weight:600;font-size:.88rem;letter-spacing:.3px;transition:all .3s}
+    .btn:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,168,83,.3)}
+    .btn-ghost{display:inline-block;background:transparent;color:var(--white);padding:14px 34px;border-radius:50px;font-weight:400;font-size:.88rem;border:1px solid var(--border);transition:all .3s}
+    .btn-ghost:hover{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+    [data-r]{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
+    [data-r].on{opacity:1;transform:none}
+    footer{background:#03040a;padding:44px 56px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;border-top:1px solid var(--border)}
+    .f-logo{font-family:'Instrument Serif',serif;font-size:1.1rem;color:var(--white)}.f-logo em{font-style:italic;color:var(--gold2)}
+    .f-links{display:flex;gap:24px}.f-links a{font-size:.78rem;color:rgba(255,255,255,.25);transition:color .2s}.f-links a:hover{color:var(--gold2)}
+    .f-copy{font-size:.78rem;color:rgba(255,255,255,.2)}
+    @media(max-width:768px){nav{padding:0 20px}.nav-links{display:none}.hamburger{display:flex}section,.page-hero{padding-left:20px;padding-right:20px}footer{padding:32px 20px;flex-direction:column;text-align:center}.f-links{justify-content:center}}
+
+    .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:20px;overflow:hidden;margin-top:52px}
+    .svc{background:var(--bg2);padding:36px 28px;transition:background .3s}
+    .svc:hover{background:var(--bg3)}
+    .svc-num{font-family:'Instrument Serif',serif;font-style:italic;font-size:1rem;color:rgba(212,168,83,.3);margin-bottom:14px;display:block}
+    .svc-name{font-family:'Instrument Serif',serif;font-size:1.15rem;font-weight:400;margin-bottom:8px}
+    .svc-desc{font-size:.84rem;color:var(--muted);line-height:1.65}
+    .process{margin-top:52px;display:flex;flex-direction:column;gap:0;max-width:680px}
+    .step{display:grid;grid-template-columns:44px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid var(--border)}
+    .step:last-child{border-bottom:none}
+    .step-n{font-family:'Instrument Serif',serif;font-style:italic;font-size:1.4rem;color:rgba(212,168,83,.3);line-height:1;padding-top:4px}
+    .step-h{font-size:.9rem;font-weight:600;margin-bottom:5px}
+    .step-p{font-size:.83rem;color:var(--muted);line-height:1.7}
     .inc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
-    .inc{background:var(--ink2);border-radius:var(--r);padding:28px 24px;border:1px solid var(--border);transition:all .3s}
-    .inc:hover{border-color:rgba(200,150,60,.3);transform:translateY(-3px)}
-    .inc-icon{font-size:1.6rem;margin-bottom:12px}
-    .inc h3{font-size:.95rem;font-weight:600;margin-bottom:6px}
-    .inc p{font-size:.83rem;color:var(--muted);line-height:1.6}
-    .process{margin-top:48px;max-width:680px}
-    .step{display:grid;grid-template-columns:52px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}
-    .step-n{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:rgba(200,150,60,.4);line-height:1;padding-top:3px}
-    .step h3{font-size:.92rem;font-weight:600;margin-bottom:5px}
-    .step p{font-size:.84rem;color:var(--muted);line-height:1.7}
-    @media(max-width:768px){.inc-grid{grid-template-columns:1fr}.step{grid-template-columns:40px 1fr}}
+    .inc{background:var(--bg2);border-radius:16px;padding:28px 24px;border:1px solid var(--border);transition:border-color .3s}
+    .inc:hover{border-color:rgba(212,168,83,.2)}
+    .inc-n{font-family:'Instrument Serif',serif;font-style:italic;font-size:.85rem;color:rgba(212,168,83,.3);margin-bottom:10px;display:block}
+    .inc h3{font-family:'Instrument Serif',serif;font-size:1rem;font-weight:400;margin-bottom:6px}
+    .inc p{font-size:.82rem;color:var(--muted);line-height:1.6}
+    .demo-cta-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:52px;text-align:center;margin-top:52px}
+    .demo-cta-box h3{font-family:'Instrument Serif',serif;font-size:1.5rem;font-weight:400;margin-bottom:12px}
+    .demo-cta-box p{font-size:.9rem;color:var(--muted);line-height:1.75;max-width:440px;margin:0 auto 28px}
+    @media(max-width:768px){.svc-grid,.inc-grid{grid-template-columns:1fr}.demo-cta-box{padding:36px 24px}}
 </style>
 </head>
 <body>
@@ -66,62 +95,63 @@
 <div class="mob" id="mob">
   <a href="index.html">Home</a><a href="demo.html">Demo</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="contact.html">Get a Website</a>
 </div>
-
-<div class="page-header">
-  <div class="s-label"><div class="s-line"></div><span class="s-tag">Services</span></div>
-  <h1>What we <em>do</em></h1>
-  <p class="sub">Professional websites, animations, SEO, and full management — everything a local business needs to get found online.</p>
+<div class="page-hero">
+  <div class="eyebrow"><span class="eyebrow-line"></span>Services</div>
+  <h1>What we <em>build</em></h1>
+  <p class="lede">Professional websites, animations, SEO, and full management — everything a local business needs to get found online.</p>
 </div>
-
 <section>
-  <div class="s-label" data-r><div class="s-line"></div><span class="s-tag">Animation Demo</span></div>
-  <h2 data-r>See what we can <em>build</em></h2>
-  <p class="sub" data-r>Our Demo page shows every animation we offer — as a cinematic scroll experience with zero stock photos.</p>
-  <div class="fx-demo-box" data-r>
-    <h3>Experience it for yourself →</h3>
-    <p style="color:var(--muted);margin:10px 0 24px;line-height:1.7">Word reveals, card cascades, parallax backgrounds, animated stats, feature lists — all built with pure CSS and GSAP. No filler images.</p>
-    <a href="demo.html" class="btn-gold">Open the Demo</a>
+  <div class="section-label" data-r><span class="s-line"></span>What Is Included</div>
+  <h2 data-r>Built for your business.<br>Not a <em>template.</em></h2>
+  <div class="svc-grid">
+    <div class="svc" data-r><span class="svc-num">01</span><div class="svc-name">Custom Website Design</div><p class="svc-desc">Built from scratch using your photos, colors, and story. Every site is unique.</p></div>
+    <div class="svc" data-r><span class="svc-num">02</span><div class="svc-name">Scroll Animations</div><p class="svc-desc">Ken Burns photo effects, scroll reveals, smooth transitions that build trust instantly.</p></div>
+    <div class="svc" data-r><span class="svc-num">03</span><div class="svc-name">Local SEO</div><p class="svc-desc">Schema markup, Google Business integration, and meta tags so you show up in local searches.</p></div>
+    <div class="svc" data-r><span class="svc-num">04</span><div class="svc-name">Mobile Responsive</div><p class="svc-desc">Flawless on every phone, tablet, and desktop. Real breakpoints, not afterthoughts.</p></div>
+    <div class="svc" data-r><span class="svc-num">05</span><div class="svc-name">Ongoing Management</div><p class="svc-desc">We handle your domain, hosting, updates, and Google Business profile every month.</p></div>
+    <div class="svc" data-r><span class="svc-num">06</span><div class="svc-name">Live in 3–4 Days</div><p class="svc-desc">From approval to a live website at your own domain in under a week. Agencies take months.</p></div>
   </div>
 </section>
-
-<section style="background:var(--ink2)">
-  <div class="s-label" data-r><div class="s-line"></div><span class="s-tag">Included in Every Site</span></div>
-  <h2 data-r>This comes <em>standard</em></h2>
+<section style="background:var(--bg2)">
+  <div class="section-label" data-r><span class="s-line"></span>Standard and Premium Tiers</div>
+  <h2 data-r>More pages, more <em>features.</em></h2>
   <div class="inc-grid">
-    <div class="inc" data-r><div class="inc-icon">📱</div><h3>Mobile Responsive</h3><p>Looks perfect on every phone, tablet, and screen.</p></div>
-    <div class="inc" data-r><div class="inc-icon">🔍</div><h3>SEO Built In</h3><p>Schema markup, meta tags, Open Graph — Google finds you.</p></div>
-    <div class="inc" data-r><div class="inc-icon">⚡</div><h3>Fast Load Times</h3><p>Optimized images and clean code. Under 2 seconds.</p></div>
-    <div class="inc" data-r><div class="inc-icon">📸</div><h3>Your Real Photos</h3><p>Pulled from your Google listing — no stock images.</p></div>
-    <div class="inc" data-r><div class="inc-icon">⭐</div><h3>Real Reviews</h3><p>Your Google reviews displayed beautifully.</p></div>
-    <div class="inc" data-r><div class="inc-icon">🎨</div><h3>Custom to You</h3><p>Colors and fonts matched to your business type.</p></div>
+    <div class="inc" data-r><span class="inc-n">Standard</span><h3>Photo Hover Effects</h3><p>Zoom in, color reveal, blur to sharp, wipe — your photos come alive when visitors hover over them.</p></div>
+    <div class="inc" data-r><span class="inc-n">Standard</span><h3>Contact Form</h3><p>Submissions go directly to your email. No backend server needed — works out of the box.</p></div>
+    <div class="inc" data-r><span class="inc-n">Standard</span><h3>Booking Integration</h3><p>Calendly or Google Calendar embed so clients can book directly from your site.</p></div>
+    <div class="inc" data-r><span class="inc-n">Premium</span><h3>Online Booking System</h3><p>Real-time availability, confirmation emails, and a full appointment management system.</p></div>
+    <div class="inc" data-r><span class="inc-n">Premium</span><h3>Stripe Payments</h3><p>Accept deposits, sell gift cards, or take full payments directly through your website.</p></div>
+    <div class="inc" data-r><span class="inc-n">Premium</span><h3>Analytics Setup</h3><p>Google Analytics 4 and Search Console configured so you can see how your site is performing.</p></div>
   </div>
 </section>
-
 <section>
-  <div class="s-label" data-r><div class="s-line"></div><span class="s-tag">How It Works</span></div>
-  <h2 data-r>From request to <em>live</em> in days</h2>
-  <div class="process" data-r>
-    <div class="step"><div class="step-n">01</div><div><h3>Fill out the form</h3><p>Tell us your business, pages you want, preferences. 3 minutes.</p></div></div>
-    <div class="step"><div class="step-n">02</div><div><h3>We reach out within 24 hours</h3><p>Confirm details and discuss pricing before anything starts.</p></div></div>
-    <div class="step"><div class="step-n">03</div><div><h3>We build your site</h3><p>1–2 days. Your photos and reviews from Google. Built custom.</p></div></div>
-    <div class="step"><div class="step-n">04</div><div><h3>You approve</h3><p>Preview link sent. Zero payment until you love it.</p></div></div>
-    <div class="step"><div class="step-n">05</div><div><h3>Live</h3><p>Pay via Stripe, domain purchased, site live within 24 hours.</p></div></div>
+  <div class="section-label" data-r><span class="s-line"></span>Animation Demo</div>
+  <h2 data-r>See it in <em>action.</em></h2>
+  <div class="demo-cta-box" data-r>
+    <h3>Experience our interactive demo</h3>
+    <p>A cinematic scroll showcase of every animation we build into your website. No stock photos, no filler — just the real effects applied to your business.</p>
+    <a href="demo.html" class="btn">Open the Demo</a>
   </div>
 </section>
-
+<section style="background:var(--bg2)">
+  <div class="section-label" data-r><span class="s-line"></span>How It Works</div>
+  <h2 data-r>From request to <em>live</em> in days.</h2>
+  <div class="process" data-r>
+    <div class="step"><div class="step-n">01</div><div><div class="step-h">Fill out the form</div><p class="step-p">Tell us your business, which pages you want, and any preferences. Takes about 3 minutes.</p></div></div>
+    <div class="step"><div class="step-n">02</div><div><div class="step-h">We reach out within 24 hours</div><p class="step-p">We confirm the details and discuss pricing before anything starts.</p></div></div>
+    <div class="step"><div class="step-n">03</div><div><div class="step-h">We build your site</div><p class="step-p">Usually 1–2 days. We pull your photos and reviews from Google and build everything custom.</p></div></div>
+    <div class="step"><div class="step-n">04</div><div><div class="step-h">You review and approve</div><p class="step-p">We send you a preview link. You do not pay a single cent until you are happy with it.</p></div></div>
+    <div class="step"><div class="step-n">05</div><div><div class="step-h">Your site goes live</div><p class="step-p">Once approved, we purchase your domain and your site is live at yourBusinessName.com within 24 hours.</p></div></div>
+  </div>
+</section>
 <footer>
   <div class="f-logo">Get Found <em>Local</em></div>
-  <p>Serving local businesses across Colorado & the US</p>
-  <a href="mailto:Get-Found-Local@outlook.com">Get-Found-Local@outlook.com</a>
+  <div class="f-links"><a href="demo.html">Demo</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="contact.html">Contact</a></div>
+  <div class="f-copy">Get-Found-Local@outlook.com</div>
 </footer>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69dd997b9ef2731c3237ae64/1jm4pv30t';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
-</script>
-<!--End of Tawk.to Script-->
+<script type="text/javascript">var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69dd997b9ef2731c3237ae64/1jm4pv30t';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();</script>
 <script>
-const io=new IntersectionObserver(e=>{e.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*80);io.unobserve(e.target)}})},{threshold:.1});
-document.querySelectorAll('[data-r]').forEach(e=>io.observe(e));
+  const io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*80);io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('[data-r]').forEach(el=>io.observe(el));
 </script>
 </body></html>

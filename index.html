@@ -32,19 +32,19 @@
       background: var(--bg);
       color: var(--white);
       overflow-x: hidden;
-      cursor: none;
+      cursor: auto;
     }
     a { text-decoration: none; color: inherit; }
 
     /* ── CUSTOM CURSOR ── */
-    #cur {
+    #cur { display:none!important;
       position: fixed; width: 8px; height: 8px;
       background: var(--gold); border-radius: 50%;
       pointer-events: none; z-index: 9999;
       transform: translate(-50%,-50%);
       transition: width .2s, height .2s;
     }
-    #curTrail {
+    #curTrail { display:none!important;
       position: fixed; width: 32px; height: 32px;
       border: 1px solid rgba(212,168,83,.35); border-radius: 50%;
       pointer-events: none; z-index: 9998;

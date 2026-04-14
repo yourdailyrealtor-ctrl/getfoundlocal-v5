@@ -128,12 +128,15 @@
     <a href="demo.html" class="active">Demo</a>
     <a href="services.html">Services</a>
     <a href="pricing.html">Pricing</a>
-    <a href="https://tawk.to/chat/69dd997b9ef2731c3237ae64/1jm4pv30t" target="_blank" rel="noopener">Chat</a> <a href="contact.html" class="nav-cta">Get a Website</a>
+    <a href="https://tawk.to/chat/69dd997b9ef2731c3237ae64/1jm4pv30t" target="_blank" rel="noopener">Chat</a>
+    <a href="contact.html" class="nav-cta">Get a Website</a>
   </div>
   <div class="hamburger" onclick="document.getElementById('mob').classList.toggle('open')"><span></span><span></span><span></span></div>
 </nav>
 <div class="mob" id="mob">
   <a href="index.html">Home</a><a href="demo.html">Demo</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="contact.html">Get a Website</a>
+  <a href="https://tawk.to/chat/69dd997b9ef2731c3237ae64/1jm4pv30t" target="_blank" rel="noopener">Chat</a>
+  <a href="https://tawk.to/chat/69dd997b9ef2731c3237ae64/1jm4pv30t" target="_blank" rel="noopener">Chat</a>
 </div>
 <div class="prog" id="prog"><div class="pd on" onclick="jumpTo(0)"></div><div class="pd" onclick="jumpTo(1)"></div><div class="pd" onclick="jumpTo(2)"></div><div class="pd" onclick="jumpTo(3)"></div><div class="pd" onclick="jumpTo(4)"></div></div>
 <div class="scroll-track"></div>
@@ -208,32 +211,7 @@
   <div class="f-copy">Get-Found-Local@outlook.com</div>
 </footer>
 
-<script>
-  const io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*80);io.unobserve(e.target)}})},{threshold:.12});
-  document.querySelectorAll('[data-r]').forEach(el=>io.observe(el));
-</script>
 
 </div>
-<script>
-gsap.registerPlugin(ScrollTrigger);
-const scenes=['s0','s1','s2','s3','s4'].map(id=>document.getElementById(id));
-const dots=document.querySelectorAll('.pd');
-let cur=-1;
-function show(idx){
-  if(idx===cur)return;
-  const prev=cur;cur=idx;
-  dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
-  gsap.to('#atmo',{x:[0,-200,200,-100,0][idx]||0,y:[0,80,-60,120,0][idx]||0,scale:1+idx*.08,duration:1.2,ease:'power2.out'});
-  if(prev>=0)gsap.to(scenes[prev],{opacity:0,scale:idx>prev?.96:1.04,duration:.55,ease:'power2.inOut'});
-  gsap.fromTo(scenes[idx],{opacity:0,scale:idx>prev?1.04:.96,y:idx>prev?24:-24},{opacity:1,scale:1,y:0,duration:.75,ease:'power3.out',delay:prev>=0?.1:0});
-  if(idx===1)gsap.to('.wspan',{y:0,stagger:.1,duration:.75,ease:'power4.out',delay:.2});
-  if(idx===2){gsap.fromTo('.s2-left',{opacity:0,x:-28},{opacity:1,x:0,duration:.7,delay:.2,ease:'power3.out'});gsap.fromTo('.s2f',{opacity:0,x:28},{opacity:1,x:0,stagger:.09,duration:.6,delay:.4,ease:'power3.out'});}
-  if(idx===3){gsap.fromTo('.s3-ey',{opacity:0},{opacity:1,duration:.5,delay:.2});gsap.fromTo('.s3-h',{opacity:0,y:18},{opacity:1,y:0,duration:.7,delay:.4,ease:'power3.out'});gsap.fromTo('.s3c',{opacity:0,y:36},{opacity:1,y:0,stagger:.1,duration:.65,delay:.6,ease:'back.out(1.4)'});}
-  if(idx===4){gsap.fromTo('.s4-h',{opacity:0,scale:.92},{opacity:1,scale:1,duration:.9,delay:.2,ease:'power3.out'});gsap.fromTo('.s4-p',{opacity:0},{opacity:1,duration:.7,delay:.8});gsap.fromTo('.s4-btn',{opacity:0,y:14},{opacity:1,y:0,duration:.65,delay:1.05});}
-}
-ScrollTrigger.create({trigger:'.scroll-track',start:'top top',end:'bottom bottom',onUpdate:self=>{const s=Math.min(4,Math.floor(self.progress*5));show(s);}});
-function jumpTo(i){window.scrollTo({top:document.querySelector('.scroll-track').offsetHeight*(i/5),behavior:'smooth'});}
-gsap.set(scenes.slice(1),{opacity:0});
-window.addEventListener('load',()=>show(0));
-</script>
+
 </body></html>

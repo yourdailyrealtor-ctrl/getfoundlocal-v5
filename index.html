@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Found Local — Websites for Local Businesses</title>
+  <meta name="description" content="We build beautiful websites for local businesses that don't have one yet. Starting at $399. Fully managed. Live in days, not weeks."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --bg: #070810;
+      --bg2: #0d0f1a;
+      --bg3: #12152a;
+      --gold: #d4a853;
+      --gold2: #f0c87a;
+      --gold3: rgba(212,168,83,0.12);
+      --cream: #f5f0e8;
+      --white: #ffffff;
+      --muted: rgba(255,255,255,0.42);
+      --border: rgba(255,255,255,0.06);
+      --r: 20px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── CUSTOM CURSOR ── */
+    #cur {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s;
+    }
+    #curTrail {
+      position: fixed; width: 32px; height: 32px;
+      border: 1px solid rgba(212,168,83,.35); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .3s, height .3s;
+    }
+    @media (hover: none) { #cur, #curTrail { display: none; } body { cursor: auto; } }
+
+    /* ── GRAIN ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 68px; display: flex; align-items: center;
+      justify-content: space-between; padding: 0 56px;
+      background: rgba(7,8,16,.8); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.25rem; color: var(--white); letter-spacing: .3px;
+    }
+    .logo em { font-style: italic; color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-links a {
+      padding: 7px 14px; font-size: .82rem; font-weight: 500;
+      color: var(--muted); border-radius: 8px; transition: color .2s;
+      letter-spacing: .2px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-cta {
+      background: var(--gold) !important; color: var(--bg) !important;
+      border-radius: 50px !important; padding: 8px 24px !important;
+      font-weight: 600 !important; font-size: .83rem !important;
+      letter-spacing: .3px !important;
+    }
+    .nav-cta:hover { background: var(--gold2) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--white); border-radius: 2px; }
+    .mob {
+      display: none; position: fixed; top: 68px; left: 0; right: 0;
+      background: rgba(7,8,16,.98); border-bottom: 1px solid var(--border);
+      padding: 16px 28px; flex-direction: column; gap: 2px; z-index: 999;
+    }
+    .mob.open { display: flex; }
+    .mob a { padding: 12px 14px; font-size: .9rem; color: var(--muted); border-radius: 8px; }
+    .mob a:hover { color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; position: relative; overflow: hidden;
+      display: flex; align-items: center; padding: 120px 56px 80px;
+    }
+
+    /* Animated SVG background */
+    .hero-svg {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .hero-svg svg { width: 100%; height: 100%; }
+
+    /* Floating organic shapes */
+    .shape {
+      position: absolute; border-radius: 50%;
+      pointer-events: none; filter: blur(1px);
+    }
+    .sh1 {
+      width: 600px; height: 600px;
+      top: -200px; right: -150px;
+      background: radial-gradient(ellipse, rgba(212,168,83,.1) 0%, transparent 65%);
+      animation: drift1 18s ease-in-out infinite;
+    }
+    .sh2 {
+      width: 300px; height: 300px;
+      bottom: -50px; left: 5%;
+      background: radial-gradient(ellipse, rgba(212,168,83,.06) 0%, transparent 65%);
+      animation: drift2 22s ease-in-out infinite;
+    }
+    @keyframes drift1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(-30px,40px) scale(1.05); }
+      66% { transform: translate(20px,-30px) scale(.97); }
+    }
+    @keyframes drift2 {
+      0%,100% { transform: translate(0,0) rotate(0deg); }
+      50% { transform: translate(40px,-20px) rotate(10deg); }
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 760px; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 32px;
+      font-size: .7rem; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold);
+    }
+    .eyebrow-line { width: 32px; height: 1px; background: var(--gold); }
+
+    .hero-h {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(3.2rem, 7vw, 6.5rem);
+      line-height: 1.0; letter-spacing: -1.5px;
+      color: var(--white); margin-bottom: 28px;
+      font-weight: 400;
+    }
+    .hero-h em { font-style: italic; color: var(--gold2); }
+    .hero-h .reveal-word {
+      display: inline-block;
+      overflow: hidden; vertical-align: bottom;
+    }
+    .hero-h .reveal-word span {
+      display: inline-block;
+      transform: translateY(110%);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem; color: var(--muted); line-height: 1.8;
+      max-width: 480px; margin-bottom: 44px; font-weight: 300;
+      letter-spacing: .1px;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block;
+      background: var(--gold); color: var(--bg);
+      padding: 15px 36px; border-radius: 50px;
+      font-weight: 600; font-size: .9rem; letter-spacing: .3px;
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(212,168,83,.3); }
+    .btn-primary:hover::after { opacity: 1; }
+    .btn-ghost {
+      display: inline-block;
+      background: transparent; color: var(--white);
+      padding: 15px 36px; border-radius: 50px;
+      font-weight: 400; font-size: .9rem; letter-spacing: .3px;
+      border: 1px solid var(--border); transition: all .3s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.04); }
+
+    /* Hero stats — subtle */
+    .hero-stats {
+      display: flex; gap: 52px; margin-top: 64px;
+      padding-top: 52px; border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .stat-val {
+      font-family: 'Instrument Serif', serif;
+      font-size: 2.2rem; color: var(--white); line-height: 1; font-weight: 400;
+    }
+    .stat-val em { font-style: italic; color: var(--gold2); font-size: .7em; }
+    .stat-lbl { font-size: .72rem; color: var(--muted); margin-top: 7px; letter-spacing: .5px; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden; border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0; background: var(--bg2);
+    }
+    .marquee-track {
+      display: flex; gap: 0;
+      animation: marquee 30s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      padding: 0 40px;
+      font-size: .7rem; font-weight: 500; letter-spacing: 2.5px;
+      text-transform: uppercase; color: rgba(255,255,255,.22);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .marquee-dot { width: 3px; height: 3px; background: var(--gold); border-radius: 50%; opacity: .6; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── WHAT WE DO ── */
+    .section { padding: 100px 56px; }
+    .section-label {
+      display: flex; align-items: center; gap: 12px;
+      font-size: .68rem; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+    }
+    .label-line { width: 28px; height: 1px; background: var(--gold); }
+    h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 400; line-height: 1.1; letter-spacing: -.5px;
+      margin-bottom: 18px;
+    }
+    h2 em { font-style: italic; color: var(--gold2); }
+    .section-sub {
+      font-size: .98rem; color: var(--muted); line-height: 1.78;
+      max-width: 520px; font-weight: 300;
+    }
+
+    /* Services — horizontal strips */
+    .services-list { margin-top: 60px; display: flex; flex-direction: column; gap: 0; }
+    .service-strip {
+      display: grid; grid-template-columns: 80px 1fr 1fr;
+      align-items: start; gap: 40px;
+      padding: 36px 0; border-bottom: 1px solid var(--border);
+      transition: all .4s;
+      cursor: default;
+    }
+    .service-strip:first-child { border-top: 1px solid var(--border); }
+    .service-strip:hover { padding-left: 12px; }
+    .service-num {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1rem; font-style: italic; color: rgba(212,168,83,.35);
+      padding-top: 4px;
+    }
+    .service-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.35rem; font-weight: 400; color: var(--white);
+      letter-spacing: -.2px;
+    }
+    .service-desc { font-size: .86rem; color: var(--muted); line-height: 1.7; padding-top: 4px; }
+    /* SVG icon for each service — animated on hover */
+    .service-icon-wrap { position: relative; overflow: hidden; border-radius: 12px; }
+
+    /* ── ILLUSTRATION SECTION (SVG-driven) ── */
+    .illustration-section {
+      padding: 100px 56px;
+      background: var(--bg2);
+      position: relative; overflow: hidden;
+    }
+    .illus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 64px; }
+
+    /* CSS illustration — abstract website mockup with SVG */
+    .illus-visual { position: relative; }
+    .illus-browser {
+      background: var(--bg3); border-radius: 16px;
+      border: 1px solid var(--border); overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,.5);
+    }
+    .browser-chrome {
+      background: rgba(255,255,255,.04); padding: 14px 18px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .b-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .b-r { background: #ff5f57; } .b-y { background: #febc2e; } .b-g { background: #28c840; }
+    .b-url {
+      flex: 1; background: rgba(255,255,255,.05); border-radius: 6px;
+      padding: 5px 14px; font-size: .7rem; color: rgba(255,255,255,.3);
+      text-align: center; margin: 0 10px;
+    }
+    .browser-body { padding: 0; }
+
+    /* Animated CSS website inside browser */
+    .mock-site-hero {
+      background: linear-gradient(135deg, var(--bg) 0%, #1a0d3a 100%);
+      padding: 32px 24px 28px; position: relative; overflow: hidden;
+    }
+    .mock-orb {
+      position: absolute; width: 150px; height: 150px;
+      border-radius: 50%; top: -50px; right: -30px;
+      background: radial-gradient(circle, rgba(212,168,83,.2) 0%, transparent 65%);
+      animation: drift1 8s ease-in-out infinite;
+    }
+    .mock-tag {
+      display: inline-block; background: rgba(212,168,83,.15);
+      border: 1px solid rgba(212,168,83,.25); color: var(--gold2);
+      font-size: .52rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 50px; margin-bottom: 10px;
+    }
+    .mock-h { font-family: 'Instrument Serif', serif; font-size: 1.3rem; color: white; line-height: 1.1; margin-bottom: 6px; }
+    .mock-h em { font-style: italic; color: var(--gold2); }
+    .mock-p { font-size: .58rem; color: rgba(255,255,255,.4); line-height: 1.5; margin-bottom: 14px; }
+    .mock-btn { display: inline-block; background: var(--gold); color: var(--bg); font-size: .58rem; font-weight: 700; padding: 5px 14px; border-radius: 50px; }
+    .mock-content { padding: 16px 24px; display: flex; flex-direction: column; gap: 8px; }
+    .mock-bar { height: 6px; background: rgba(255,255,255,.07); border-radius: 3px; }
+    .mock-bar.w80 { width: 80%; } .mock-bar.w60 { width: 60%; } .mock-bar.w40 { width: 40%; }
+    .mock-cards-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+    .mock-card { background: rgba(255,255,255,.04); border-radius: 8px; padding: 10px 8px; }
+    .mock-card-top { width: 20px; height: 20px; border-radius: 6px; background: rgba(212,168,83,.25); margin-bottom: 5px; }
+    .mock-card-line { height: 4px; background: rgba(255,255,255,.07); border-radius: 2px; margin: 3px 0; }
+
+    /* Floating badges */
+    .illus-badge {
+      position: absolute; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.4);
+      display: flex; align-items: center; gap: 10px;
+      animation: float 4s ease-in-out infinite;
+    }
+    .ib1 { bottom: -20px; left: -24px; animation-delay: 0s; }
+    .ib2 { top: -16px; right: -20px; animation-delay: -2s; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .badge-dot { width: 8px; height: 8px; border-radius: 50%; background: #28c840; flex-shrink: 0; }
+    .badge-text { font-size: .72rem; color: var(--muted); }
+    .badge-text strong { display: block; font-size: .82rem; color: var(--white); }
+
+    /* Right side content */
+    .illus-content .section-label { margin-bottom: 20px; }
+    .illus-points { display: flex; flex-direction: column; gap: 0; margin-top: 36px; }
+    .illus-point {
+      display: flex; align-items: flex-start; gap: 20px;
+      padding: 24px 0; border-bottom: 1px solid var(--border);
+      transition: padding-left .3s;
+    }
+    .illus-point:last-child { border-bottom: none; }
+    .illus-point:hover { padding-left: 8px; }
+    .point-n {
+      font-family: 'Instrument Serif', serif;
+      font-size: .9rem; font-style: italic; color: rgba(212,168,83,.35);
+      flex-shrink: 0; padding-top: 2px; min-width: 24px;
+    }
+    .point-h { font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+    .point-p { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── PRICING ── */
+    .pricing-section { padding: 100px 56px; }
+    .pricing-intro { max-width: 640px; margin-bottom: 64px; }
+
+    /* Pricing explanation box */
+    .pricing-explain {
+      background: rgba(212,168,83,.07); border: 1px solid rgba(212,168,83,.15);
+      border-radius: 14px; padding: 24px 28px; margin-bottom: 48px;
+      max-width: 720px;
+    }
+    .pricing-explain p {
+      font-size: .88rem; color: rgba(255,255,255,.6); line-height: 1.75;
+    }
+    .pricing-explain strong { color: var(--white); }
+
+    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 48px; }
+    .price-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 36px 30px;
+      position: relative; transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    .price-card:hover { transform: translateY(-6px); border-color: rgba(212,168,83,.25); box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+    .price-card.featured {
+      border-color: rgba(212,168,83,.3);
+      background: rgba(212,168,83,.04);
+    }
+    .featured-badge {
+      position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: var(--bg);
+      font-size: .6rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 4px 16px; border-radius: 50px;
+      white-space: nowrap;
+    }
+    .pc-tier { font-size: .65rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .pc-price {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3.2rem; font-weight: 400; color: var(--white);
+      line-height: 1; margin-bottom: 6px;
+    }
+    .pc-monthly { font-size: .78rem; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
+    .pc-monthly strong { color: var(--gold2); }
+    .pc-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .pc-list li { display: flex; align-items: flex-start; gap: 10px; font-size: .84rem; color: rgba(255,255,255,.6); line-height: 1.4; }
+    .pc-check { width: 16px; height: 16px; border-radius: 50%; background: rgba(212,168,83,.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .pc-check svg { width: 8px; height: 8px; }
+    .pc-btn {
+      display: block; text-align: center; padding: 12px; border-radius: 50px;
+      font-size: .85rem; font-weight: 500; letter-spacing: .3px;
+      border: 1px solid var(--border); color: var(--white);
+      transition: all .25s;
+    }
+    .pc-btn:hover, .featured .pc-btn { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+    /* Management plans */
+    .mgmt-section { margin-top: 12px; }
+    .mgmt-title {
+      font-size: .68rem; font-weight: 500; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .mgmt-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .mgmt-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .mgmt-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px 22px;
+      transition: border-color .3s;
+    }
+    .mgmt-card:hover { border-color: rgba(212,168,83,.2); }
+    .mgmt-price {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.9rem; color: var(--gold2); margin-bottom: 2px; font-weight: 400;
+    }
+    .mgmt-price span { font-size: .85rem; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+    .mgmt-name { font-size: .75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--white); margin-bottom: 12px; }
+    .mgmt-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .mgmt-list li { font-size: .8rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .mgmt-list li::before { content: ''; width: 3px; height: 3px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+
+    /* ── REVIEWS — HONEST ── */
+    .reviews-section { padding: 100px 56px; background: var(--bg2); }
+    .reviews-card {
+      max-width: 680px; margin: 52px auto 0;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 52px;
+      text-align: center;
+    }
+    .reviews-card h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.6rem; font-weight: 400; line-height: 1.25; margin-bottom: 14px;
+    }
+    .reviews-card h3 em { font-style: italic; color: var(--gold2); }
+    .reviews-card p { font-size: .9rem; color: var(--muted); line-height: 1.75; max-width: 440px; margin: 0 auto 32px; font-weight: 300; }
+    .reviews-link {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold); color: var(--bg);
+      padding: 13px 30px; border-radius: 50px;
+      font-weight: 600; font-size: .88rem; letter-spacing: .3px;
+      transition: all .25s;
+    }
+    .reviews-link:hover { background: var(--gold2); transform: translateY(-2px); }
+    .reviews-link svg { width: 14px; height: 14px; }
+
+    /* ── FINAL CTA ── */
+    .final-section {
+      padding: 120px 56px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .final-section::before {
+      content: ''; position: absolute;
+      width: 800px; height: 800px; border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      background: radial-gradient(circle, rgba(212,168,83,.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .final-section h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 400; letter-spacing: -1px; line-height: 1.0;
+      position: relative; z-index: 1; margin-bottom: 20px;
+    }
+    .final-section h2 em { font-style: italic; color: var(--gold2); }
+    .final-section p { font-size: 1rem; color: var(--muted); max-width: 420px; margin: 0 auto 40px; line-height: 1.75; font-weight: 300; position: relative; z-index: 1; }
+    .final-section .btn-primary { position: relative; z-index: 1; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #03040a; padding: 44px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-logo { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: var(--white); }
+    .footer-logo em { font-style: italic; color: var(--gold2); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: .8rem; color: rgba(255,255,255,.25); transition: color .2s; }
+    .footer-links a:hover { color: var(--gold2); }
+    footer .footer-copy { font-size: .78rem; color: rgba(255,255,255,.2); }
+
+    /* ── SCROLL REVEAL ── */
+    [data-reveal] {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .75s cubic-bezier(.4,0,.2,1), transform .75s cubic-bezier(.4,0,.2,1);
+    }
+    [data-reveal].visible { opacity: 1; transform: none; }
+    [data-reveal="left"] { transform: translateX(-32px); }
+    [data-reveal="left"].visible { transform: none; }
+    [data-reveal="right"] { transform: translateX(32px); }
+    [data-reveal="right"].visible { transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero, .section, .illustration-section, .pricing-section, .reviews-section, .final-section { padding-left: 20px; padding-right: 20px; }
+      .services-list .service-strip { grid-template-columns: 50px 1fr; gap: 20px; }
+      .service-desc { display: none; }
+      .illus-grid { grid-template-columns: 1fr; gap: 48px; }
+      .pricing-grid, .mgmt-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 32px; }
+      footer { padding: 32px 20px; flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="curTrail"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">Get Found <em>Local</em></a>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="demo.html">Demo</a>
+    <a href="services.html">Services</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html" class="nav-cta">Get a Website</a>
+  </div>
+  <div class="hamburger" onclick="document.getElementById('mob').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html">Home</a>
+  <a href="demo.html">Demo</a>
+  <a href="services.html">Services</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="contact.html">Get a Website</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="shape sh1"></div>
+  <div class="shape sh2"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-line"></span>
+      Websites for Local Business
+    </div>
+    <h1 class="hero-h">
+      <span class="reveal-word"><span>Your business,</span></span><br>
+      <span class="reveal-word"><span>beautifully</span></span><br>
+      <span class="reveal-word"><span><em>online.</em></span></span>
+    </h1>
+    <p class="hero-sub">We build professional websites for local businesses that don't have one — and manage everything so you never have to think about it again.</p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn-primary">Request Your Website</a>
+      <a href="demo.html" class="btn-ghost">See the Demo</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-val">3–4 <em>days</em></div>
+        <div class="stat-lbl">Average time to go live</div>
+      </div>
+      <div>
+        <div class="stat-val">$0 <em>until</em></div>
+        <div class="stat-lbl">You approve the design</div>
+      </div>
+      <div>
+        <div class="stat-val">100<em>%</em></div>
+        <div class="stat-lbl">Mobile responsive</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Custom Design<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Scroll Animations<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Local SEO Built In<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Mobile Perfect<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Fully Managed<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Live in Days<span class="marquee-dot"></span></span>
+    <span class="marquee-item">You Own Everything<span class="marquee-dot"></span></span>
+    <span class="marquee-item">No Technical Skills Required<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Custom Design<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Scroll Animations<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Local SEO Built In<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Mobile Perfect<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Fully Managed<span class="marquee-dot"></span></span>
+    <span class="marquee-item">Live in Days<span class="marquee-dot"></span></span>
+    <span class="marquee-item">You Own Everything<span class="marquee-dot"></span></span>
+    <span class="marquee-item">No Technical Skills Required<span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- WHAT WE DO -->
+<section class="section" id="services">
+  <div class="section-label" data-reveal><span class="label-line"></span>What We Build</div>
+  <h2 data-reveal>Everything your business<br>needs <em>online,</em> handled.</h2>
+  <p class="section-sub" data-reveal>From a simple presence to a full online experience — we build it, launch it, and manage it. You just run your business.</p>
+  <div class="services-list">
+    <div class="service-strip" data-reveal>
+      <div class="service-num">01</div>
+      <div class="service-name">Custom Website Design</div>
+      <div class="service-desc">Built from scratch for your specific business — your photos, your colors, your story. Every site is unique, never a template dropped in.</div>
+    </div>
+    <div class="service-strip" data-reveal>
+      <div class="service-num">02</div>
+      <div class="service-name">Scroll Animations</div>
+      <div class="service-desc">Ken Burns photo effects, scroll reveals, smooth transitions — the kind of polish that makes visitors trust you within seconds of landing on the page.</div>
+    </div>
+    <div class="service-strip" data-reveal>
+      <div class="service-num">03</div>
+      <div class="service-name">Local SEO</div>
+      <div class="service-desc">Schema markup, Google Business integration, and proper meta tags — so when someone searches for your business type in your city, you show up.</div>
+    </div>
+    <div class="service-strip" data-reveal>
+      <div class="service-num">04</div>
+      <div class="service-name">Mobile Responsive</div>
+      <div class="service-desc">Flawless on every phone, tablet, and desktop screen. Built with real breakpoints, not just "it kind of works on mobile."</div>
+    </div>
+    <div class="service-strip" data-reveal>
+      <div class="service-num">05</div>
+      <div class="service-name">Ongoing Management</div>
+      <div class="service-desc">We handle your domain, hosting, updates, and Google Business profile every month. You never have to log into a dashboard.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ILLUSTRATION SECTION -->
+<section class="illustration-section">
+  <div class="illus-grid">
+    <!-- CSS illustration mockup -->
+    <div class="illus-visual" data-reveal="left">
+      <div class="illus-browser">
+        <div class="browser-chrome">
+          <div class="b-dot b-r"></div>
+          <div class="b-dot b-y"></div>
+          <div class="b-dot b-g"></div>
+          <div class="b-url">yourBusinessName.com</div>
+        </div>
+        <div class="browser-body">
+          <div class="mock-site-hero">
+            <div class="mock-orb"></div>
+            <div class="mock-tag">4.9 Stars · Your City, CO</div>
+            <div class="mock-h">Your Business<br><em>Name Here</em></div>
+            <div class="mock-p">Professional service your community trusts. Built from your real Google listing — your photos, hours, and reviews.</div>
+            <div class="mock-btn">Call Us Today</div>
+          </div>
+          <div class="mock-content">
+            <div class="mock-bar w80"></div>
+            <div class="mock-bar w60"></div>
+            <div class="mock-cards-row">
+              <div class="mock-card"><div class="mock-card-top"></div><div class="mock-card-line"></div><div class="mock-card-line" style="width:60%"></div></div>
+              <div class="mock-card"><div class="mock-card-top"></div><div class="mock-card-line"></div><div class="mock-card-line" style="width:75%"></div></div>
+              <div class="mock-card"><div class="mock-card-top"></div><div class="mock-card-line"></div><div class="mock-card-line" style="width:50%"></div></div>
+            </div>
+            <div class="mock-bar w40"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Floating badges -->
+      <div class="illus-badge ib1">
+        <div class="badge-dot"></div>
+        <div class="badge-text"><strong>Live in 3 days</strong>domain included</div>
+      </div>
+      <div class="illus-badge ib2">
+        <div class="badge-text"><strong>You own everything</strong>domain, files, all of it</div>
+      </div>
+    </div>
+
+    <!-- Right content -->
+    <div class="illus-content" data-reveal="right">
+      <div class="section-label"><span class="label-line"></span>How It Works</div>
+      <h2>From nothing to <em>live</em><br>in days, not months.</h2>
+      <div class="illus-points">
+        <div class="illus-point">
+          <span class="point-n">01</span>
+          <div><div class="point-h">Tell us about your business</div><div class="point-p">Fill out our short form — takes 3 minutes. Tell us what pages you want, your preferred style, and any special requests.</div></div>
+        </div>
+        <div class="illus-point">
+          <span class="point-n">02</span>
+          <div><div class="point-h">We build it, you approve it</div><div class="point-p">We pull your photos, hours, and reviews from Google and build your site. We send you a preview — no payment until you love it.</div></div>
+        </div>
+        <div class="illus-point">
+          <span class="point-n">03</span>
+          <div><div class="point-h">Your site goes live</div><div class="point-p">We purchase your domain, point everything correctly, and your site is live at yourBusinessName.com — typically within 24 hours of approval.</div></div>
+        </div>
+        <div class="illus-point">
+          <span class="point-n">04</span>
+          <div><div class="point-h">We handle everything after</div><div class="point-p">Monthly management covers your domain renewal, hosting, updates, and Google Business profile. You never touch a thing.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="pricing-intro">
+    <div class="section-label" data-reveal><span class="label-line"></span>Pricing</div>
+    <h2 data-reveal>Simple pricing.<br>No <em>surprises.</em></h2>
+  </div>
+
+  <!-- Clear explanation -->
+  <div class="pricing-explain" data-reveal>
+    <p>Every website requires <strong>two things</strong>: a one-time build fee to create it, and a monthly management plan to keep it running. The build fee covers design and development. The monthly plan covers your domain registration, hosting, and ongoing support. Both are required.</p>
+  </div>
+
+  <!-- Build tiers -->
+  <div class="pricing-grid">
+    <div class="price-card" data-reveal>
+      <div class="pc-tier">Basic</div>
+      <div class="pc-price">$399</div>
+      <div class="pc-monthly">One-time build fee<br><strong>+ management plan required</strong></div>
+      <ul class="pc-list">
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>1–5 pages</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Animated hero section</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Scroll reveal animations</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Your real photos and reviews</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>SEO and schema markup</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Mobile responsive</li>
+      </ul>
+      <a href="contact.html" class="pc-btn">Get Started</a>
+    </div>
+
+    <div class="price-card featured" data-reveal>
+      <div class="featured-badge">Most Popular</div>
+      <div class="pc-tier">Standard</div>
+      <div class="pc-price">$799</div>
+      <div class="pc-monthly">One-time build fee<br><strong>+ management plan required</strong></div>
+      <ul class="pc-list">
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>6–10 pages</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Everything in Basic</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Photo hover effects</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Contact form</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Booking button integration</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Gallery and FAQ pages</li>
+      </ul>
+      <a href="contact.html" class="pc-btn">Get Started</a>
+    </div>
+
+    <div class="price-card" data-reveal>
+      <div class="pc-tier">Premium</div>
+      <div class="pc-price">$1,499</div>
+      <div class="pc-monthly">One-time build fee<br><strong>+ management plan required</strong></div>
+      <ul class="pc-list">
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Everything in Standard</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Online booking system</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Stripe payment integration</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Product or service catalog</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Google Analytics setup</li>
+        <li><div class="pc-check"><svg viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="#d4a853" stroke-width="1.5" stroke-linecap="round"/></svg></div>Newsletter and live chat</li>
+      </ul>
+      <a href="contact.html" class="pc-btn">Get Started</a>
+    </div>
+  </div>
+
+  <!-- Management plans -->
+  <div class="mgmt-section" data-reveal>
+    <div class="mgmt-title">Monthly Management — required with every build</div>
+    <div class="mgmt-grid">
+      <div class="mgmt-card">
+        <div class="mgmt-price">$49<span>/mo</span></div>
+        <div class="mgmt-name">Lite</div>
+        <ul class="mgmt-list">
+          <li>Domain registration and annual renewal</li>
+          <li>GitHub Pages hosting and SSL certificate</li>
+          <li>Monthly uptime monitoring</li>
+          <li>Annual file backup</li>
+        </ul>
+      </div>
+      <div class="mgmt-card">
+        <div class="mgmt-price">$129<span>/mo</span></div>
+        <div class="mgmt-name">Standard</div>
+        <ul class="mgmt-list">
+          <li>Everything in Lite</li>
+          <li>Up to 2 content updates per month</li>
+          <li>Google Business profile updates</li>
+          <li>Monthly SEO health check</li>
+        </ul>
+      </div>
+      <div class="mgmt-card">
+        <div class="mgmt-price">$249<span>/mo</span></div>
+        <div class="mgmt-name">Pro</div>
+        <ul class="mgmt-list">
+          <li>Everything in Standard</li>
+          <li>Unlimited revisions, same-day turnaround</li>
+          <li>Priority support, 2-hour response</li>
+          <li>Monthly performance report</li>
+          <li>Google Business fully managed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS — HONEST -->
+<section class="reviews-section">
+  <div class="section-label" data-reveal><span class="label-line"></span>Reviews</div>
+  <div class="reviews-card" data-reveal>
+    <h3>We are just getting started —<br>and we would love <em>your feedback.</em></h3>
+    <p>We do not have reviews yet. We let our work speak for itself. But if you have worked with us, we would genuinely love to hear what you think. It means everything to a new business.</p>
+    <a href="https://search.google.com/local/writereview" target="_blank" class="reviews-link">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+      Leave Us a Review
+    </a>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-section">
+  <h2 data-reveal>Ready to get<br><em>found?</em></h2>
+  <p data-reveal>Your customers are searching for you right now. Let us make sure they find something beautiful.</p>
+  <a href="contact.html" class="btn-primary" data-reveal>Request Your Website</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Get Found <em>Local</em></div>
+  <div class="footer-links">
+    <a href="demo.html">Demo</a>
+    <a href="services.html">Services</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="footer-copy">Get-Found-Local@outlook.com</div>
+</footer>
+
+<!-- Tawk.to -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69dd997b9ef2731c3237ae64/1jm4pv30t';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const trail = document.getElementById('curTrail');
+if (window.matchMedia('(hover: hover)').matches) {
+  let mx=0, my=0, tx=0, ty=0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.left = mx + 'px';
+    cur.style.top = my + 'px';
+  });
+  document.addEventListener('mouseleave', () => { cur.style.opacity=0; trail.style.opacity=0; });
+  document.addEventListener('mouseenter', () => { cur.style.opacity=1; trail.style.opacity=1; });
+  (function animTrail() {
+    tx += (mx - tx) * 0.1;
+    ty += (my - ty) * 0.1;
+    trail.style.left = tx + 'px';
+    trail.style.top = ty + 'px';
+    requestAnimationFrame(animTrail);
+  })();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cur.style.width='14px'; cur.style.height='14px'; trail.style.width='52px'; trail.style.height='52px'; });
+    el.addEventListener('mouseleave', () => { cur.style.width='8px'; cur.style.height='8px'; trail.style.width='32px'; trail.style.height='32px'; });
+  });
+}
+
+// ── HERO WORD REVEAL ──
+window.addEventListener('load', () => {
+  const words = document.querySelectorAll('.reveal-word span');
+  gsap.to(words, {
+    y: 0, duration: 1, stagger: 0.12, ease: 'power4.out', delay: 0.2
+  });
+  gsap.fromTo('.hero-eyebrow', {opacity:0,y:12}, {opacity:1,y:0,duration:.8});
+  gsap.fromTo('.hero-sub', {opacity:0}, {opacity:1,duration:.9,delay:.7});
+  gsap.fromTo('.hero-actions', {opacity:0,y:16}, {opacity:1,y:0,duration:.8,delay:.9});
+  gsap.fromTo('.hero-stats', {opacity:0,y:16}, {opacity:1,y:0,duration:.8,delay:1.1});
+});
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+// ── SERVICE STRIPS — horizontal line animation ──
+document.querySelectorAll('.service-strip').forEach(strip => {
+  strip.addEventListener('mouseenter', () => {
+    gsap.to(strip.querySelector('.service-num'), { color: 'rgba(212,168,83,.9)', duration: .3 });
+  });
+  strip.addEventListener('mouseleave', () => {
+    gsap.to(strip.querySelector('.service-num'), { color: 'rgba(212,168,83,.35)', duration: .3 });
+  });
+});
+
+// ── PARALLAX on orbs ──
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 30;
+  const y = (e.clientY / window.innerHeight - 0.5) * 20;
+  gsap.to('.sh1', { x: x*0.8, y: y*0.8, duration: 2, ease: 'power1.out' });
+  gsap.to('.sh2', { x: -x*0.5, y: -y*0.5, duration: 2.5, ease: 'power1.out' });
+});
+
+// ── STAGGER grid children ──
+document.querySelectorAll('.services-list, .pricing-grid, .mgmt-grid').forEach(grid => {
+  Array.from(grid.children).forEach((child, i) => {
+    child.style.transitionDelay = (i * 0.09) + 's';
+  });
+});
+</script>
+</body>
+</html>

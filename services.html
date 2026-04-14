@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — Get Found Local</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root{--ink:#0a0d18;--ink2:#141828;--ink3:#1e2538;--gold:#c8963c;--gold2:#e8b96a;--white:#fff;--muted:rgba(255,255,255,.45);--border:rgba(255,255,255,.08);--r:16px}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+    a{text-decoration:none;color:inherit}img{display:block}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(10,13,24,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--white)}.logo em{font-style:italic;color:var(--gold)}
+    .nav-links{display:flex;align-items:center;gap:4px}.nav-links a{padding:7px 14px;font-size:.85rem;font-weight:500;color:var(--muted);border-radius:8px;transition:color .2s,background .2s}.nav-links a:hover,.nav-links a.active{color:var(--white);background:rgba(255,255,255,.06)}
+    .nav-cta{background:var(--gold)!important;color:var(--ink)!important;border-radius:50px!important;padding:8px 22px!important;font-weight:700!important}.nav-cta:hover{background:var(--gold2)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px}.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px}
+    .mob{display:none;position:fixed;top:66px;left:0;right:0;background:rgba(10,13,24,.97);border-bottom:1px solid var(--border);padding:14px 24px;flex-direction:column;gap:2px;z-index:999}.mob.open{display:flex}.mob a{padding:11px 14px;font-size:.92rem;color:var(--muted);border-radius:8px;font-weight:500}.mob a:hover{color:var(--white);background:rgba(255,255,255,.06)}
+    .page-header{padding:120px 52px 60px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+    .page-header::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,150,60,.1) 0%,transparent 65%);pointer-events:none}
+    .s-label{display:flex;align-items:center;gap:10px;margin-bottom:16px}.s-line{width:28px;height:1px;background:var(--gold)}.s-tag{font-size:.7rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
+    h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,7vw,6rem);font-weight:800;letter-spacing:-2px;line-height:.95;margin-bottom:20px}
+    h1 em{font-style:italic;font-family:'DM Serif Display',serif;color:var(--gold2)}
+    h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-1px;line-height:1.05;margin-bottom:16px}
+    h2 em{font-style:italic;font-family:'DM Serif Display',serif;color:var(--gold2)}
+    .sub{font-size:.98rem;color:var(--muted);line-height:1.75;max-width:520px;font-weight:300}
+    section{padding:90px 52px}
+    .btn-gold{display:inline-block;background:var(--gold);color:var(--ink);padding:14px 32px;border-radius:50px;font-weight:700;font-size:.92rem;transition:all .25s}
+    .btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 6px 24px rgba(200,150,60,.35)}
+    .btn-outline{display:inline-block;background:transparent;color:var(--white);padding:14px 32px;border-radius:50px;font-weight:500;font-size:.92rem;border:1px solid var(--border);transition:all .25s}
+    .btn-outline:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.05)}
+    [data-r]{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.4,0,.2,1),transform .65s cubic-bezier(.4,0,.2,1)}[data-r].on{opacity:1;transform:none}
+    footer{background:var(--ink2);padding:40px 52px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-top:1px solid var(--border)}
+    .f-logo{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--white)}.f-logo em{font-style:italic;color:var(--gold2)}
+    footer p{font-size:.8rem;color:rgba(255,255,255,.3)}footer a{font-size:.8rem;color:rgba(255,255,255,.3);transition:color .2s}footer a:hover{color:var(--gold2)}
+    @media(max-width:768px){nav{padding:0 20px}.nav-links{display:none}.hamburger{display:flex}section,.page-header{padding-left:20px;padding-right:20px}footer{padding:28px 20px;flex-direction:column;text-align:center}}
+    .fx-demo-box{background:var(--ink2);border-radius:var(--r);padding:52px;text-align:center;border:1px solid var(--border);margin-top:52px}
+    .fx-demo-box h3{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:12px}
+    .inc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+    .inc{background:var(--ink2);border-radius:var(--r);padding:28px 24px;border:1px solid var(--border);transition:all .3s}
+    .inc:hover{border-color:rgba(200,150,60,.3);transform:translateY(-3px)}
+    .inc-icon{font-size:1.6rem;margin-bottom:12px}
+    .inc h3{font-size:.95rem;font-weight:600;margin-bottom:6px}
+    .inc p{font-size:.83rem;color:var(--muted);line-height:1.6}
+    .process{margin-top:48px;max-width:680px}
+    .step{display:grid;grid-template-columns:52px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--border)}.step:last-child{border-bottom:none}
+    .step-n{font-family:'DM Serif Display',serif;font-size:1.6rem;font-style:italic;color:rgba(200,150,60,.4);line-height:1;padding-top:3px}
+    .step h3{font-size:.92rem;font-weight:600;margin-bottom:5px}
+    .step p{font-size:.84rem;color:var(--muted);line-height:1.7}
+    @media(max-width:768px){.inc-grid{grid-template-columns:1fr}.step{grid-template-columns:40px 1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Get Found <em>Local</em></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="demo.html">Demo</a>
+    <a href="services.html" class="active">Services</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html" class="nav-cta">Get a Website</a>
+  </div>
+  <div class="hamburger" onclick="document.getElementById('mob').classList.toggle('open')"><span></span><span></span><span></span></div>
+</nav>
+<div class="mob" id="mob">
+  <a href="index.html">Home</a><a href="demo.html">Demo</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="contact.html">Get a Website</a>
+</div>
+
+<div class="page-header">
+  <div class="s-label"><div class="s-line"></div><span class="s-tag">Services</span></div>
+  <h1>What we <em>do</em></h1>
+  <p class="sub">Professional websites, animations, SEO, and full management — everything a local business needs to get found online.</p>
+</div>
+
+<section>
+  <div class="s-label" data-r><div class="s-line"></div><span class="s-tag">Animation Demo</span></div>
+  <h2 data-r>See what we can <em>build</em></h2>
+  <p class="sub" data-r>Our Demo page shows every animation we offer — as a cinematic scroll experience with zero stock photos.</p>
+  <div class="fx-demo-box" data-r>
+    <h3>Experience it for yourself →</h3>
+    <p style="color:var(--muted);margin:10px 0 24px;line-height:1.7">Word reveals, card cascades, parallax backgrounds, animated stats, feature lists — all built with pure CSS and GSAP. No filler images.</p>
+    <a href="demo.html" class="btn-gold">Open the Demo</a>
+  </div>
+</section>
+
+<section style="background:var(--ink2)">
+  <div class="s-label" data-r><div class="s-line"></div><span class="s-tag">Included in Every Site</span></div>
+  <h2 data-r>This comes <em>standard</em></h2>
+  <div class="inc-grid">
+    <div class="inc" data-r><div class="inc-icon">📱</div><h3>Mobile Responsive</h3><p>Looks perfect on every phone, tablet, and screen.</p></div>
+    <div class="inc" data-r><div class="inc-icon">🔍</div><h3>SEO Built In</h3><p>Schema markup, meta tags, Open Graph — Google finds you.</p></div>
+    <div class="inc" data-r><div class="inc-icon">⚡</div><h3>Fast Load Times</h3><p>Optimized images and clean code. Under 2 seconds.</p></div>
+    <div class="inc" data-r><div class="inc-icon">📸</div><h3>Your Real Photos</h3><p>Pulled from your Google listing — no stock images.</p></div>
+    <div class="inc" data-r><div class="inc-icon">⭐</div><h3>Real Reviews</h3><p>Your Google reviews displayed beautifully.</p></div>
+    <div class="inc" data-r><div class="inc-icon">🎨</div><h3>Custom to You</h3><p>Colors and fonts matched to your business type.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="s-label" data-r><div class="s-line"></div><span class="s-tag">How It Works</span></div>
+  <h2 data-r>From request to <em>live</em> in days</h2>
+  <div class="process" data-r>
+    <div class="step"><div class="step-n">01</div><div><h3>Fill out the form</h3><p>Tell us your business, pages you want, preferences. 3 minutes.</p></div></div>
+    <div class="step"><div class="step-n">02</div><div><h3>We reach out within 24 hours</h3><p>Confirm details and discuss pricing before anything starts.</p></div></div>
+    <div class="step"><div class="step-n">03</div><div><h3>We build your site</h3><p>1–2 days. Your photos and reviews from Google. Built custom.</p></div></div>
+    <div class="step"><div class="step-n">04</div><div><h3>You approve</h3><p>Preview link sent. Zero payment until you love it.</p></div></div>
+    <div class="step"><div class="step-n">05</div><div><h3>Live</h3><p>Pay via Stripe, domain purchased, site live within 24 hours.</p></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">Get Found <em>Local</em></div>
+  <p>Serving local businesses across Colorado & the US</p>
+  <a href="mailto:Get-Found-Local@outlook.com">Get-Found-Local@outlook.com</a>
+</footer>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69dd997b9ef2731c3237ae64/1jm4pv30t';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
+</script>
+<!--End of Tawk.to Script-->
+<script>
+const io=new IntersectionObserver(e=>{e.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('on'),i*80);io.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('[data-r]').forEach(e=>io.observe(e));
+</script>
+</body></html>

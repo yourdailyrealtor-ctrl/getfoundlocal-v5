@@ -559,6 +559,7 @@
   <a href="services.html">Services</a>
   <a href="pricing.html">Pricing</a>
   <a href="contact.html">Get a Website</a>
+  <a href="https://tawk.to/chat/69dd997b9ef2731c3237ae64/1jm4pv30t" target="_blank" rel="noopener">Chat</a>
 </div>
 
 <!-- HERO -->
@@ -855,85 +856,8 @@
 
 <!-- Tawk.to -->
 <script type="text/javascript">
-var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
-(function(){var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];s1.async=true;s1.src='https://embed.tawk.to/69dd997b9ef2731c3237ae64/1jm4pv30t';s1.charset='UTF-8';s1.setAttribute('crossorigin','*');s0.parentNode.insertBefore(s1,s0);})();
 </script>
 
-<script>
-gsap.registerPlugin(ScrollTrigger);
 
-// ── CURSOR ──
-const cur = document.getElementById('cur');
-const trail = document.getElementById('curTrail');
-if (window.matchMedia('(hover: hover)').matches) {
-  let mx=0, my=0, tx=0, ty=0;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cur.style.left = mx + 'px';
-    cur.style.top = my + 'px';
-  });
-  document.addEventListener('mouseleave', () => { cur.style.opacity=0; trail.style.opacity=0; });
-  document.addEventListener('mouseenter', () => { cur.style.opacity=1; trail.style.opacity=1; });
-  (function animTrail() {
-    tx += (mx - tx) * 0.1;
-    ty += (my - ty) * 0.1;
-    trail.style.left = tx + 'px';
-    trail.style.top = ty + 'px';
-    requestAnimationFrame(animTrail);
-  })();
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => { cur.style.width='14px'; cur.style.height='14px'; trail.style.width='52px'; trail.style.height='52px'; });
-    el.addEventListener('mouseleave', () => { cur.style.width='8px'; cur.style.height='8px'; trail.style.width='32px'; trail.style.height='32px'; });
-  });
-}
-
-// ── HERO WORD REVEAL ──
-window.addEventListener('load', () => {
-  const words = document.querySelectorAll('.reveal-word span');
-  gsap.to(words, {
-    y: 0, duration: 1, stagger: 0.12, ease: 'power4.out', delay: 0.2
-  });
-  gsap.fromTo('.hero-eyebrow', {opacity:0,y:12}, {opacity:1,y:0,duration:.8});
-  gsap.fromTo('.hero-sub', {opacity:0}, {opacity:1,duration:.9,delay:.7});
-  gsap.fromTo('.hero-actions', {opacity:0,y:16}, {opacity:1,y:0,duration:.8,delay:.9});
-  gsap.fromTo('.hero-stats', {opacity:0,y:16}, {opacity:1,y:0,duration:.8,delay:1.1});
-});
-
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 80);
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
-
-// ── SERVICE STRIPS — horizontal line animation ──
-document.querySelectorAll('.service-strip').forEach(strip => {
-  strip.addEventListener('mouseenter', () => {
-    gsap.to(strip.querySelector('.service-num'), { color: 'rgba(212,168,83,.9)', duration: .3 });
-  });
-  strip.addEventListener('mouseleave', () => {
-    gsap.to(strip.querySelector('.service-num'), { color: 'rgba(212,168,83,.35)', duration: .3 });
-  });
-});
-
-// ── PARALLAX on orbs ──
-document.addEventListener('mousemove', e => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 30;
-  const y = (e.clientY / window.innerHeight - 0.5) * 20;
-  gsap.to('.sh1', { x: x*0.8, y: y*0.8, duration: 2, ease: 'power1.out' });
-  gsap.to('.sh2', { x: -x*0.5, y: -y*0.5, duration: 2.5, ease: 'power1.out' });
-});
-
-// ── STAGGER grid children ──
-document.querySelectorAll('.services-list, .pricing-grid, .mgmt-grid').forEach(grid => {
-  Array.from(grid.children).forEach((child, i) => {
-    child.style.transitionDelay = (i * 0.09) + 's';
-  });
-});
-</script>
 </body>
 </html>
